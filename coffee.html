@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <meta name="description" content="Bean Boutique - Your premium coffee shop">
+  <title>BeanBoutique - Coffee</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="coffeecss.css">
+  <script>
+    // Profile sidebar functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const profileSidebar = document.getElementById('profileSidebar');
+      const profileToggler = document.getElementById('profileToggler');
+      const closeProfileSidebar = document.getElementById('closeProfileSidebar');
+      const profileSidebarOverlay = document.getElementById('profileSidebarOverlay');
+      const searchButton = document.querySelector('.search-button');
+      const searchInput = document.querySelector('.search-input');
+
+      // Open profile sidebar
+      profileToggler.addEventListener('click', function() {
+        profileSidebar.style.width = '250px';
+        profileSidebarOverlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      });
+
+      // Close profile sidebar
+      function closeSidebar() {
+        profileSidebar.style.width = '0';
+        profileSidebarOverlay.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+
+      closeProfileSidebar.addEventListener('click', closeSidebar);
+      profileSidebarOverlay.addEventListener('click', closeSidebar);
+
+      // Search functionality
+      function performSearch() {
+        const searchTerm = searchInput.value.trim();
+        if (searchTerm) {
+          alert(`Searching for: ${searchTerm}`); 
+        }
+      }
+
+      searchButton.addEventListener('click', performSearch);
+      
+      searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          performSearch();
+        }
+      });
+
+      // Wait until the DOM is fully loaded before executing
+      window.addEventListener('DOMContentLoaded', (event) => {
+        // Get the fragment identifier (the part after #)
+        const hash = window.location.hash;
+        
+        // Check if there is a hash value
+        if (hash) {
+          // Find the element with that ID
+          const element = document.querySelector(hash);
+          
+          // If the element exists
+          if (element) {
+            // Scroll to the element
+            element.scrollIntoView({
+              behavior: 'smooth' // Optional: adds smooth scrolling
+            });
+            
+            // Optional: Highlight the element
+            element.style.border = "2px solid blue";
+            element.style.padding = "10px";
+            
+            // Optional: Focus the element for accessibility
+            element.setAttribute('tabindex', '-1');
+            element.focus();
+          }
+        }
+      });
+
+      // Cart count functionality
+      const cartButtons = document.querySelectorAll('.product-button, .featured-product-button');
+      const cartCount = document.querySelector('.cart-count');
+      let count = 0;
+      
+      if (cartButtons.length > 0) {
+        cartButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            count++;
+            if (cartCount) {
+              cartCount.textContent = count;
+              
+              // Animation for cart count
+              cartCount.style.transform = 'scale(1.2)';
+              setTimeout(() => {
+                cartCount.style.transform = 'scale(1)';
+              }, 300);
+            }
+            
+            // Button feedback
+            this.textContent = 'Added!';
+            this.style.backgroundColor = '#28a745';
+            setTimeout(() => {
+              this.textContent = 'Add to Cart';
+              this.style.backgroundColor = '#4b3832';
+            }, 1000);
+          });
+        });
+      }
+      
+      // Product card hover effect enhancement
+      const productCards = document.querySelectorAll('.product-card');
+      
+      if (productCards.length > 0) {
+        productCards.forEach(card => {
+          card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+            this.style.boxShadow = '0 8px 20px rgba(0,0,0,0.15)';
+          });
+          
+          card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '0 4px 10px rgba(0,0,0,0.1)';
+          });
+        });
+      }
+        
+      // Featured product animation
+      const featuredProduct = document.querySelector('.featured-product');
+      
+      setTimeout(() => {
+        featuredProduct.style.opacity = '1';
+        featuredProduct.style.transform = 'translateY(0)';
+      }, 300);
+
+      // Set active link based on current page
+      const currentPage = window.location.pathname.split('/').pop();
+      const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+      
+      navLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPage) {
+          link.classList.add('active');
+          link.setAttribute('aria-current', 'page');
+        }
+      });
+      
+      // Special case for home page
+      if (currentPage === '' || currentPage === 'index.html') {
+        document.getElementById('homeLink').classList.add('active');
+        document.getElementById('homeLink').setAttribute('aria-current', 'page');
+      }
+    });
+  </script>
+</head>
+<body>
+  
+  <h1 id="javajunc">Bean Boutique</h1>
+
+  <!-- Search Bar -->
+  <div class="search-container">
+    <div class="search-bar">
+      <input type="text" class="search-input" placeholder="Search coffees, equipment..." aria-label="Search">
+      <button type="submit" class="search-button" aria-label="Search">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <button class="profile-toggler" type="button" id="profileToggler" aria-label="Toggle profile menu" aria-haspopup="true">
+        <img src="images/img1.png" class="profile-img" alt="User profile">
+      </button>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html" id="homeLink">Home</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Products
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="productsDropdown">
+              <li><a class="dropdown-item" href="coffee.html">Coffee</a></li>
+              <li><a class="dropdown-item" href="equipments.html">Equipments</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="events.html">Events</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="offers.html">Offers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="giftcards.html">Gift Cards</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+        </ul>
+        
+        <!-- Shopping Cart Icon -->
+        <div class="cart-icon">
+          <a href="cart.html" style="color: inherit;">
+            <i class="fa fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Profile Sidebar -->
+  <div class="profile-sidebar" id="profileSidebar">
+    <button class="close-btn" id="closeProfileSidebar" aria-label="Close profile menu" type="button">&times;</button>
+    <div class="profile-sidebar-content">
+      <img src="images/img1.png" class="profile-sidebar-img" alt="User profile">
+      <a href="#">My Cart</a>
+      <a href="sign.html">Sign in/Sign out</a>
+      <a href="feed.html">Feed</a>
+      <a href="location.html">Location</a>
+      <a href="contact.html">Customer Support</a>
+      <a href="#">Settings</a>
+    </div>
+  </div>
+  <div class="profile-sidebar-overlay" id="profileSidebarOverlay"></div>
+
+  <!-- Featured Product-->
+  <div class="container">
+    <div class="featured-product horizontal">
+      <img src="images/fp/3.png" alt="Special Reserve Coffee" class="featured-product-image">
+      <div class="featured-product-content">
+        <span class="featured-badge">Featured</span>
+        <h2 class="featured-product-title">Java Junction (Bean Boutique House Blend)</h2>
+        <p class="featured-product-description">Our rarest small-batch coffee, hand-made from the highest altitude farms in Colombia. Selected by the best chefs from the Paris, France. Notes of dark chocolate, cherry, and caramel with a smooth, velvety finish.</p>
+        <div class="featured-product-price">$99.99</div>
+        <button class="featured-product-button">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Difference -->
+  <div style="text-align: center; font-size: 24px; margin: 30px 0;">⋯</div>
+
+  <!-- Products -->
+  <section class="products-section">
+    <div class="container">
+      <h2 class="section-title">Our Premium Selection</h2>
+      <div class="products-grid">
+        <!-- Product 1 -->
+        <div class="product-card" id="a">
+          <div class="product-image-container">
+            <img src="images/cf/6.png" alt="Sumatra Mandheling" class="product-image">
+            <span class="product-badge">Premium</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Single Origin</span>
+            <h3 class="product-title">Sumatra Mandheling</h3>
+            <p class="product-description">Organic Dark Roast Sumatra Whole Bean Coffee - 2lb Bag.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-half-o checked"></span>
+            </div>
+            <div class="product-price">$69.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 2 -->
+        <div class="product-card" id="b">
+          <div class="product-image-container">
+            <img src="images/cf/5.png" alt="Java Junction (Bean Boutique House Blend)" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">Single Origin</span>
+            <h3 class="product-title">Java Junction (Bean Boutique House Blend)</h3>
+            <p class="product-description">Java Junction Blend, Medium Roast, 50% Colombian Supremo.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+            </div>
+            <div class="product-price">$99.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 3 -->
+        <div class="product-card" id="c">
+          <div class="product-image-container">
+            <img src="images/cf/4.png" alt="Colombian Supremo" class="product-image">
+            <span class="product-badge">Bestseller</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Blend</span>
+            <h3 class="product-title">Colombian Supremo</h3>
+            <p class="product-description">Stone Street Cold Brew Coffee Duo: Breakfast Bliss and Bold Colombian Blend.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-o"></span>
+            </div>
+            <div class="product-price">$34.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 4 -->
+        <div class="product-card" id="d">
+          <div class="product-image-container">
+            <img src="images/cf/3.png" alt="Kenya AA" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">Single Origin</span>
+            <h3 class="product-title">Kenya AA</h3>
+            <p class="product-description">Fresh Roasted Coffee, Kenya AA, Med-Dark Roast, 24 Pods for K Cup Brewers.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-o"></span>
+            </div>
+            <div class="product-price">$14.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 5 -->
+        <div class="product-card" id="e">
+          <div class="product-image-container">
+            <img src="images/cf/2.png" alt="Ethiopian Yirgacheffe" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">Blend</span>
+            <h3 class="product-title">Ethiopian Yirgacheffe</h3>
+            <p class="product-description">BTwiga Coffee Bundle Ethiopian Coffee Beans (Yirgacheffe & Sidamo) Medium Roast, 24 oz (2 x 12 oz), Organic Whole Bean Arabica with Berry, Chocolate, Citrus & Floral Notes, Ideal Gift for Coffee Lovers.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-half-o checked"></span>
+            </div>
+            <div class="product-price">$39.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 6 -->
+        <div class="product-card" id="f">
+          <div class="product-image-container">
+            <img src="images/cf/1.png" alt="Brazil Santos" class="product-image">
+            <span class="product-badge">Premium</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Single Origin</span>
+            <h3 class="product-title">Brazil Santos</h3>
+            <p class="product-description">Peet's Coffee, Medium Roast Ground Coffee - Single Origin Brazil 36 Ounces (2 Bags of 18 Ounces).</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+            </div>
+            <div class="product-price">$29.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 7 -->
+        <div class="product-card" >
+          <div class="product-image-container">
+            <img src="images/cf/6.png" alt="Sumatra Mandheling1" class="product-image">
+            <span class="product-badge">New</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Single Origin</span>
+            <h3 class="product-title">Sumatra Mandheling</h3>
+            <p class="product-description">Organic Dark Roast Sumatra Whole Bean Coffee - 2lb Bag.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-half-o checked"></span>
+            </div>
+            <div class="product-price">$69.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 8 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/cf/5.png" alt="Java Junction (Bean Boutique House Blend)1" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">Single Origin</span>
+            <h3 class="product-title">Java Junction (Bean Boutique House Blend)</h3>
+            <p class="product-description">Java Junction Blend, Medium Roast, 50% Colombian Supremo.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+            </div>
+            <div class="product-price">$99.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 9 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/cf/4.png" alt="Colombian Supremo1" class="product-image">
+            <span class="product-badge">Bestseller</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Blend</span>
+            <h3 class="product-title">Colombian Supremo</h3>
+            <p class="product-description">Stone Street Cold Brew Coffee Duo: Breakfast Bliss and Bold Colombian Blend.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-o"></span>
+            </div>
+            <div class="product-price">$34.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 10 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/cf/3.png" alt="Kenya AA1" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">Single Origin</span>
+            <h3 class="product-title">Kenya AA</h3>
+            <p class="product-description">Fresh Roasted Coffee, Kenya AA, Med-Dark Roast, 24 Pods for K Cup Brewers.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-o"></span>
+            </div>
+            <div class="product-price">$14.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 11 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/cf/2.png" alt="Ethiopian Yirgacheffe1" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">Blend</span>
+            <h3 class="product-title">Ethiopian Yirgacheffe</h3>
+            <p class="product-description">BTwiga Coffee Bundle Ethiopian Coffee Beans (Yirgacheffe & Sidamo) Medium Roast, 24 oz (2 x 12 oz), Organic Whole Bean Arabica with Berry, Chocolate, Citrus & Floral Notes, Ideal Gift for Coffee Lovers.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-half-o checked"></span>
+            </div>
+            <div class="product-price">$39.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 12 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/cf/1.png" alt="Brazil Santos1" class="product-image">
+            <span class="product-badge">Premium</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Single Origin</span>
+            <h3 class="product-title">Brazil Santos</h3>
+            <p class="product-description">Peet's Coffee, Medium Roast Ground Coffee - Single Origin Brazil 36 Ounces (2 Bags of 18 Ounces).</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+            </div>
+            <div class="product-price">$29.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 13 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/cf/6.png" alt="Sumatra Mandheling2" class="product-image">
+            <span class="product-badge">New</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Single Origin</span>
+            <h3 class="product-title">Sumatra Mandheling</h3>
+            <p class="product-description">Organic Dark Roast Sumatra Whole Bean Coffee - 2lb Bag.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-half-o checked"></span>
+            </div>
+            <div class="product-price">$69.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 14 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/cf/5.png" alt="Java Junction (Bean Boutique House Blend)2" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">Single Origin</span>
+            <h3 class="product-title">Java Junction (Bean Boutique House Blend)</h3>
+            <p class="product-description">Java Junction Blend, Medium Roast, 50% Colombian Supremo.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+            </div>
+            <div class="product-price">$99.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 15 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/cf/4.png" alt="Colombian Supremo2" class="product-image">
+            <span class="product-badge">Bestseller</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Blend</span>
+            <h3 class="product-title">Colombian Supremo</h3>
+            <p class="product-description">Stone Street Cold Brew Coffee Duo: Breakfast Bliss and Bold Colombian Blend.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-o"></span>
+            </div>
+            <div class="product-price">$34.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 16 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/cf/3.png" alt="Kenya AA2" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">Single Origin</span>
+            <h3 class="product-title">Kenya AA</h3>
+            <p class="product-description">Fresh Roasted Coffee, Kenya AA, Med-Dark Roast, 24 Pods for K Cup Brewers.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-o"></span>
+            </div>
+            <div class="product-price">$14.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 17 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/cf/2.png" alt="Ethiopian Yirgacheffe2" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">Blend</span>
+            <h3 class="product-title">Ethiopian Yirgacheffe</h3>
+            <p class="product-description">BTwiga Coffee Bundle Ethiopian Coffee Beans (Yirgacheffe & Sidamo) Medium Roast, 24 oz (2 x 12 oz), Organic Whole Bean Arabica with Berry, Chocolate, Citrus & Floral Notes, Ideal Gift for Coffee Lovers.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-half-o checked"></span>
+            </div>
+            <div class="product-price">$39.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 18 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/cf/1.png" alt="Brazil Santos2" class="product-image">
+            <span class="product-badge">Premium</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">Single Origin</span>
+            <h3 class="product-title">Brazil Santos</h3>
+            <p class="product-description">Peet's Coffee, Medium Roast Ground Coffee - Single Origin Brazil 36 Ounces (2 Bags of 18 Ounces).</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+            </div>
+            <div class="product-price">$29.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Difference -->
+  <div style="text-align: center; font-size: 24px; margin: 30px 0;">⋯</div>
+   
+
+  <!-- Footer -->
+  <footer class="footer-section">
+    <div class="container">
+      <div class="footer-content">
+        <!-- Footer Logo & Description -->
+        <div class="footer-brand">
+          <h3 class="footer-title">Bean Boutique</h3>
+          <p class="footer-description">
+            Your premium coffee experience. Crafted with passion, brewed for perfection.
+          </p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-links">
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="coffee.html">Coffee Blends</a></li>
+            <li><a href="equipments.html">Equipment</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="footer-newsletter">
+          <h4 class="footer-heading">Stay Updated</h4>
+          <p>Subscribe for exclusive offers and brewing tips.</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Your Email" required>
+            <button type="submit" class="newsletter-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="footer-copyright">
+        <p>&copy; <span id="year"></span> Bean Boutique. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

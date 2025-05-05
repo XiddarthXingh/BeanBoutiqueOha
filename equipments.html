@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <meta name="description" content="Bean Boutique - Your premium coffee shop">
+  <title>BeanBoutique - Equipments</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="equipmentcss.css">
+  <script>
+    // All DOMContentLoaded events combined into one
+    document.addEventListener('DOMContentLoaded', function() {
+      // Profile sidebar functionality
+      const profileSidebar = document.getElementById('profileSidebar');
+      const profileToggler = document.getElementById('profileToggler');
+      const closeProfileSidebar = document.getElementById('closeProfileSidebar');
+      const profileSidebarOverlay = document.getElementById('profileSidebarOverlay');
+      const searchButton = document.querySelector('.search-button');
+      const searchInput = document.querySelector('.search-input');
+
+      // Open profile sidebar
+      if (profileToggler) {
+        profileToggler.addEventListener('click', function() {
+          profileSidebar.style.width = '250px';
+          profileSidebarOverlay.style.display = 'block';
+          document.body.style.overflow = 'hidden';
+        });
+      }
+
+      // Close profile sidebar
+      function closeSidebar() {
+        profileSidebar.style.width = '0';
+        profileSidebarOverlay.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+
+      if (closeProfileSidebar) {
+        closeProfileSidebar.addEventListener('click', closeSidebar);
+      }
+      
+      if (profileSidebarOverlay) {
+        profileSidebarOverlay.addEventListener('click', closeSidebar);
+      }
+
+      // Search functionality
+      function performSearch() {
+        const searchTerm = searchInput.value.trim();
+        if (searchTerm) {
+          alert(`Searching for: ${searchTerm}`); // Replace with actual search functionality
+          // window.location.href = `search.html?q=${encodeURIComponent(searchTerm)}`;
+        }
+      }
+
+      if (searchButton) {
+        searchButton.addEventListener('click', performSearch);
+      }
+      
+      if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            performSearch();
+          }
+        });
+      }
+
+      // Cart count functionality
+      const cartButtons = document.querySelectorAll('.product-button, .featured-product-button');
+      const cartCount = document.querySelector('.cart-count');
+      let count = 0;
+      
+      if (cartButtons.length > 0) {
+        cartButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            count++;
+            if (cartCount) {
+              cartCount.textContent = count;
+              
+              // Animation for cart count
+              cartCount.style.transform = 'scale(1.2)';
+              setTimeout(() => {
+                cartCount.style.transform = 'scale(1)';
+              }, 300);
+            }
+            
+            // Button feedback
+            this.textContent = 'Added!';
+            this.style.backgroundColor = '#28a745';
+            setTimeout(() => {
+              this.textContent = 'Add to Cart';
+              this.style.backgroundColor = '#4b3832';
+            }, 1000);
+          });
+        });
+      }
+      
+      // Product card hover effect enhancement
+      const productCards = document.querySelectorAll('.product-card');
+      
+      if (productCards.length > 0) {
+        productCards.forEach(card => {
+          card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+            this.style.boxShadow = '0 8px 20px rgba(0,0,0,0.15)';
+          });
+          
+          card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '0 4px 10px rgba(0,0,0,0.1)';
+          });
+        });
+      }
+
+      // Set active link based on current page
+      const currentPage = window.location.pathname.split('/').pop();
+      const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+      
+      if (navLinks.length > 0) {
+        navLinks.forEach(link => {
+          if (link.getAttribute('href') === currentPage) {
+            link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
+          }
+        });
+        
+        // Special case for home page
+        if (currentPage === '' || currentPage === 'index.html') {
+          const homeLink = document.getElementById('homeLink');
+          if (homeLink) {
+            homeLink.classList.add('active');
+            homeLink.setAttribute('aria-current', 'page');
+          }
+        }
+      }
+    });
+  </script>
+</head>
+<body>
+  
+  <h1 id="javajunc">Bean Boutique</h1>
+
+  <!-- Search Bar -->
+  <div class="search-container">
+    <div class="search-bar">
+      <input type="text" class="search-input" placeholder="Search coffees, equipment..." aria-label="Search">
+      <button type="submit" class="search-button" aria-label="Search">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <button class="profile-toggler" type="button" id="profileToggler" aria-label="Toggle profile menu" aria-haspopup="true">
+        <img src="images/img1.png" class="profile-img" alt="User profile">
+      </button>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html" id="homeLink">Home</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Products
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="productsDropdown">
+              <li><a class="dropdown-item" href="coffee.html">Coffee</a></li>
+              <li><a class="dropdown-item" href="equipments.html">Equipments</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="events.html">Events</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="offers.html">Offers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="giftcards.html">Gift Cards</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+        </ul>
+        
+        <!-- Shopping Cart Icon -->
+        <div class="cart-icon">
+          <a href="cart.html" style="color: inherit;">
+            <i class="fa fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Profile Sidebar -->
+  <div class="profile-sidebar" id="profileSidebar">
+    <button class="close-btn" id="closeProfileSidebar" aria-label="Close profile menu" type="button">&times;</button>
+    <div class="profile-sidebar-content">
+      <img src="images/img1.png" class="profile-sidebar-img" alt="User profile">
+      <a href="#">My Cart</a>
+      <a href="sign.html">Sign in/Sign out</a>
+      <a href="feed.html">Feed</a>
+      <a href="location.html">Location</a>
+      <a href="contact.html">Customer Support</a>
+      <a href="#">Settings</a>
+    </div>
+  </div>
+  <div class="profile-sidebar-overlay" id="profileSidebarOverlay"></div>
+
+  <!-- Product grid-->
+  <section class="products-section">
+    <div class="container">
+      <h2 class="section-title">Coffee Equipments</h2>
+      <div class="products-grid">
+
+        <!-- Product 1 -->
+        <div class="product-card" id="a">
+          <div class="product-image-container">
+            <img src="images/eq/8.png" alt="Breville Bambino Plus Espresso Machine" class="product-image">
+            <span class="product-badge">New</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">BREVILLE BAMBINO</span>
+            <h3 class="product-title">Breville Bambino Plus Espresso Machine</h3>
+            <p class="product-description">Breville Bambino Plus Espresso Machine BES500BSS, Brushed Stainless Steel.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-half-o checked"></span>
+            </div>
+            <div class="product-price">$334.49</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 2 -->
+        <div class="product-card" id="b">
+          <div class="product-image-container">
+            <img src="images/eq/9.png" alt="Chemex Classic Series" class="product-image">
+            <span class="product-badge">Bestseller</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">CHEMEX</span>
+            <h3 class="product-title">Chemex Classic Series</h3>
+            <p class="product-description">Chemex Pour-Over Glass Coffeemaker - Classic Series - 8-Cup - Exclusive Packaging.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+            </div>
+            <div class="product-price">$49.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 3 -->
+        <div class="product-card" id="c">
+          <div class="product-image-container">
+            <img src="images/eq/10.png" alt="Fellow Stagg EKG Electric Gooseneck Kettle" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">FELLOW</span>
+            <h3 class="product-title">Fellow Stagg EKG Electric Gooseneck Kettle</h3>
+            <p class="product-description">Fellow Stagg EKG Pro Electric Gooseneck Kettle - Pour-Over Coffee and Tea, Quick Heating, Precise Temperature Control, Scheduling, Built-in Brew Timer, Matte White, 0.9 Liter.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-o"></span>
+            </div>
+            <div class="product-price">$159.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 4 -->
+        <div class="product-card" id="d">
+          <div class="product-image-container">
+            <img src="images/eq/11.png" alt="Hario V60 Pour-Over Kit" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">HARIO</span>
+            <h3 class="product-title">Hario V60 Pour-Over Kit</h3>
+            <p class="product-description">Hario V60 Ceramic Pour Over Coffee Set, Size 02, White.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-o"></span>
+            </div>
+            <div class="product-price">$17.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 5 -->
+        <div class="product-card" id="e">
+          <div class="product-image-container">
+            <img src="images/eq/7.png" alt="Timemore Chestnut C2 Manual Grinder" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">TIMEMORE</span>
+            <h3 class="product-title">Timemore Chestnut C2 Manual Grinder</h3>
+            <p class="product-description">C2S Coffee Grinder & Fish Smart Electric Coffee Kettle & Black Mirror Duo.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-half-o checked"></span>
+            </div>
+            <div class="product-price">$349.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 6 -->
+        <div class="product-card" id="f">
+          <div class="product-image-container">
+            <img src="images/eq/12.png" alt="Bialetti Moka Express" class="product-image">
+            <span class="product-badge">Imported</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">BIALETTI</span>
+            <h3 class="product-title">Bialetti Moka Express</h3>
+            <p class="product-description">Bialetti Moka Express 6 Cup, 1 EA, Silver, 6800, 06800.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+            </div>
+            <div class="product-price">$29.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 7 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/eq/8.png" alt="Breville Bambino Plus Espresso Machine1" class="product-image">
+            <span class="product-badge">New</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">BREVILLE BAMBINO</span>
+            <h3 class="product-title">Breville Bambino Plus Espresso Machine</h3>
+            <p class="product-description">Breville Bambino Plus Espresso Machine BES500BSS, Brushed Stainless Steel.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-half-o checked"></span>
+            </div>
+            <div class="product-price">$334.49</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 8 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/eq/9.png" alt="Chemex Classic Series1" class="product-image">
+            <span class="product-badge">Bestseller</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">CHEMEX</span>
+            <h3 class="product-title">Chemex Classic Series</h3>
+            <p class="product-description">Chemex Pour-Over Glass Coffeemaker - Classic Series - 8-Cup - Exclusive Packaging.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+            </div>
+            <div class="product-price">$49.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 9 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/eq/10.png" alt="Fellow Stagg EKG Electric Gooseneck Kettle1" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">FELLOW</span>
+            <h3 class="product-title">Fellow Stagg EKG Electric Gooseneck Kettle</h3>
+            <p class="product-description">Fellow Stagg EKG Pro Electric Gooseneck Kettle - Pour-Over Coffee and Tea, Quick Heating, Precise Temperature Control, Scheduling, Built-in Brew Timer, Matte White, 0.9 Liter.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-o"></span>
+            </div>
+            <div class="product-price">$159.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 10 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/eq/11.png" alt="Hario V60 Pour-Over Kit1" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">HARIO</span>
+            <h3 class="product-title">Hario V60 Pour-Over Kit</h3>
+            <p class="product-description">Hario V60 Ceramic Pour Over Coffee Set, Size 02, White.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-o"></span>
+            </div>
+            <div class="product-price">$17.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 11 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/eq/7.png" alt="Timemore Chestnut C2 Manual Grinder1" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">TIMEMORE</span>
+            <h3 class="product-title">Timemore Chestnut C2 Manual Grinder</h3>
+            <p class="product-description">C2S Coffee Grinder & Fish Smart Electric Coffee Kettle & Black Mirror Duo.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-half-o checked"></span>
+            </div>
+            <div class="product-price">$349.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 12 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/eq/12.png" alt="Bialetti Moka Express1" class="product-image">
+            <span class="product-badge">Imported</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">BIALETTI</span>
+            <h3 class="product-title">Bialetti Moka Express</h3>
+            <p class="product-description">Bialetti Moka Express 6 Cup, 1 EA, Silver, 6800, 06800.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+            </div>
+            <div class="product-price">$29.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 13 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/eq/8.png" alt="Breville Bambino Plus Espresso Machine2" class="product-image">
+            <span class="product-badge">New</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">BREVILLE BAMBINO</span>
+            <h3 class="product-title">Breville Bambino Plus Espresso Machine</h3>
+            <p class="product-description">Breville Bambino Plus Espresso Machine BES500BSS, Brushed Stainless Steel.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-half-o checked"></span>
+            </div>
+            <div class="product-price">$334.49</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 14 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/eq/9.png" alt="Chemex Classic Series2" class="product-image">
+            <span class="product-badge">Bestseller</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">CHEMEX</span>
+            <h3 class="product-title">Chemex Classic Series</h3>
+            <p class="product-description">Chemex Pour-Over Glass Coffeemaker - Classic Series - 8-Cup - Exclusive Packaging.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+            </div>
+            <div class="product-price">$49.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 15 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/eq/10.png" alt="Fellow Stagg EKG Electric Gooseneck Kettle2" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">FELLOW</span>
+            <h3 class="product-title">Fellow Stagg EKG Electric Gooseneck Kettle</h3>
+            <p class="product-description">Fellow Stagg EKG Pro Electric Gooseneck Kettle - Pour-Over Coffee and Tea, Quick Heating, Precise Temperature Control, Scheduling, Built-in Brew Timer, Matte White, 0.9 Liter.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-o"></span>
+            </div>
+            <div class="product-price">$159.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 16 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/eq/11.png" alt="Hario V60 Pour-Over Kit2" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">HARIO</span>
+            <h3 class="product-title">Hario V60 Pour-Over Kit</h3>
+            <p class="product-description">Hario V60 Ceramic Pour Over Coffee Set, Size 02, White.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-o"></span>
+            </div>
+            <div class="product-price">$17.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 17 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/eq/7.png" alt="Timemore Chestnut C2 Manual Grinder2" class="product-image">
+          </div>
+          <div class="product-content">
+            <span class="product-category">TIMEMORE</span>
+            <h3 class="product-title">Timemore Chestnut C2 Manual Grinder</h3>
+            <p class="product-description">C2S Coffee Grinder & Fish Smart Electric Coffee Kettle & Black Mirror Duo.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star-half-o checked"></span>
+            </div>
+            <div class="product-price">$349.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Product 18 -->
+        <div class="product-card">
+          <div class="product-image-container">
+            <img src="images/eq/12.png" alt="Bialetti Moka Express2" class="product-image">
+            <span class="product-badge">Imported</span>
+          </div>
+          <div class="product-content">
+            <span class="product-category">BIALETTI</span>
+            <h3 class="product-title">Bialetti Moka Express</h3>
+            <p class="product-description">Bialetti Moka Express 6 Cup, 1 EA, Silver, 6800, 06800.</p>
+            <div class="product-rating">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+            </div>
+            <div class="product-price">$29.99</div>
+            <button class="product-button">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Difference -->
+  <div style="text-align: center; font-size: 24px; margin: 30px 0;">⋯</div>
+
+  <!-- Footer -->
+  <footer class="footer-section">
+    <div class="container">
+      <div class="footer-content">
+        <!-- Footer Logo & Description -->
+        <div class="footer-brand">
+          <h3 class="footer-title">Bean Boutique</h3>
+          <p class="footer-description">
+            Your premium coffee experience. Crafted with passion, brewed for perfection.
+          </p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-links">
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="coffee.html">Coffee Blends</a></li>
+            <li><a href="equipments.html">Equipment</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="footer-newsletter">
+          <h4 class="footer-heading">Stay Updated</h4>
+          <p>Subscribe for exclusive offers and brewing tips.</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Your Email" required>
+            <button type="submit" class="newsletter-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="footer-copyright">
+        <p>&copy; <span id="year"></span> Bean Boutique. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

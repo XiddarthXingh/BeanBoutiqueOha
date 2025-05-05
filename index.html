@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <meta name="description" content="Bean Boutique - Your premium coffee shop">
+  <title>Bean Boutique</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="homecss.css">
+  <script>
+    //Popup
+    document.addEventListener('DOMContentLoaded', function() {
+      const welcomePopupOverlay = document.getElementById('welcomePopupOverlay');
+      const welcomePopupClose = document.getElementById('welcomePopupClose');
+      const welcomePopupAccept = document.getElementById('welcomePopupAccept');
+      const welcomePopupDecline = document.getElementById('welcomePopupDecline');
+      
+      if (!welcomePopupOverlay) return; // Exit if popup doesn't exist
+      
+      // Show popup after delay (no localStorage check)
+      setTimeout(() => {
+        welcomePopupOverlay.classList.add('show');
+        if (welcomePopupClose) welcomePopupClose.focus(); // Accessibility focus
+      }, 1500);
+      
+      // Close popup function (removed localStorage.setItem)
+      function closeWelcomePopup() {
+        welcomePopupOverlay.classList.remove('show');
+      }
+      
+      // Close on button clicks
+      [welcomePopupClose, welcomePopupDecline].forEach(element => {
+        if (element) element.addEventListener('click', closeWelcomePopup);
+      });
+      
+      // Accept button behavior
+      if (welcomePopupAccept) {
+        welcomePopupAccept.addEventListener('click', function() {
+          closeWelcomePopup();
+          window.location.href = 'coffee.html?discount=WELCOME15';
+        });
+      }
+      
+      // Close when clicking outside
+      welcomePopupOverlay.addEventListener('click', function(e) {
+        if (e.target === welcomePopupOverlay) closeWelcomePopup();
+      });
+    });
+
+    // Generic scroll reveal function
+    function revealOnScroll(selector) {
+      const box = document.querySelector(selector);
+      if (!box) return;
+
+      const trigger = window.innerHeight * 0.8;
+      const top = box.getBoundingClientRect().top;
+
+      if (top < trigger) {
+        box.classList.add('visible');
+      }
+    }
+
+    // Combined event listener
+    function handleScroll() {
+      revealOnScroll('#of');
+      revealOnScroll('#fpcards');
+      revealOnScroll('#uecards');
+      
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('load', handleScroll);
+
+
+    // Profile sidebar functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const profileSidebar = document.getElementById('profileSidebar');
+      const profileToggler = document.getElementById('profileToggler');
+      const closeProfileSidebar = document.getElementById('closeProfileSidebar');
+      const profileSidebarOverlay = document.getElementById('profileSidebarOverlay');
+      const searchButton = document.querySelector('.search-button');
+      const searchInput = document.querySelector('.search-input');
+
+      // Open profile sidebar
+      profileToggler.addEventListener('click', function() {
+        profileSidebar.style.width = '250px';
+        profileSidebarOverlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      });
+
+      // Close profile sidebar
+      function closeSidebar() {
+        profileSidebar.style.width = '0';
+        profileSidebarOverlay.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+
+      closeProfileSidebar.addEventListener('click', closeSidebar);
+      profileSidebarOverlay.addEventListener('click', closeSidebar);
+
+      // Set active link based on current page
+      const currentPage = window.location.pathname.split('/').pop();
+      const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+      
+      navLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPage) {
+          link.classList.add('active');
+          link.setAttribute('aria-current', 'page');
+        }
+      });
+      
+      // Special case for home page
+      if (currentPage === '' || currentPage === 'index.html') {
+        document.getElementById('homeLink').classList.add('active');
+        document.getElementById('homeLink').setAttribute('aria-current', 'page');
+      }
+    });
+
+    // Wait until the DOM is fully loaded before executing
+    window.addEventListener('DOMContentLoaded', (event) => {
+      
+      // Get the fragment identifier (the part after #)
+      const hash = window.location.hash;
+      
+      // Check if there is a hash value
+      if (hash) {
+        
+        // Find the element with that ID
+        const element = document.querySelector(hash);
+        
+        // If the element exists
+        if (element) {
+          
+          // Scroll to the element
+          element.scrollIntoView({
+            behavior: 'smooth' // Optional: adds smooth scrolling
+          });
+          
+          // Highlight element
+          element.style.border = "2px solid blue";
+          element.style.padding = "10px";
+          
+          // Focus the element for accessibility
+          element.setAttribute('tabindex', '-1');
+          element.focus();
+        }
+      }
+    });
+
+    // Footer
+    // Update copyright year automatically
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</head>
+<body>
+  <!-- PopUp -->
+  <div class="welcome-popup-overlay" id="welcomePopupOverlay">
+    <div class="welcome-popup">
+      <button class="welcome-popup-close" id="welcomePopupClose" aria-label="Close welcome message">&times;</button>
+      <div class="welcome-popup-content">
+        <img src="images/entry/img1.jpg" 
+            alt="Java Junction Coffee" class="welcome-popup-image">
+        <h3>Welcome to Bean Boutique!</h3>
+        <p>We're thrilled to have you here. Enjoy 15% off your first order with code: <strong>WELCOMEbb</strong></p>
+        <div class="welcome-popup-actions">
+          <button class="welcome-popup-button" id="welcomePopupAccept">Claim Your Discount</button>
+          <button class="welcome-popup-button secondary" id="welcomePopupDecline">Maybe Later</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <button class="profile-toggler" type="button" id="profileToggler" aria-label="Toggle profile menu" aria-haspopup="true">
+        <img src="images/img1.png" class="profile-img" alt="User profile">
+      </button>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html" id="homeLink">Home</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Products
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="productsDropdown">
+              <li><a class="dropdown-item" href="coffee.html">Coffee</a></li>
+              <li><a class="dropdown-item" href="equipments.html">Equipments</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="events.html">Events</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="offers.html">Offers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="giftcards.html">Gift Cards</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+        </ul>
+        
+        <!-- Shopping Cart Icon -->
+        <div class="cart-icon">
+          <a href="cart.html" style="color: inherit;">
+            <i class="fa fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Profile Sidebar -->
+  <div class="profile-sidebar" id="profileSidebar">
+    <button class="close-btn" id="closeProfileSidebar" aria-label="Close profile menu" type="button">&times;</button>
+    <div class="profile-sidebar-content">
+      <img src="images/img1.png" class="profile-sidebar-img" alt="User profile">
+      <a href="#">My Cart</a>
+      <a href="sign.html">Sign in/Sign out</a>
+      <a href="feed.html">Feed</a>
+      <a href="location.html">Location</a>
+      <a href="contact.html">Customer Support</a>
+      <a href="#">Settings</a>
+    </div>
+  </div>
+  <div class="profile-sidebar-overlay" id="profileSidebarOverlay"></div>
+ 
+
+  <!-- Entry -->
+<div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner" id="entry">
+    <div class="carousel-item active" id="entry1">
+      <img src="images/entry/img2.jpg" class="d-block w-100" alt="EntryPic1">
+    </div>
+    <div class="carousel-item active" id="entry2">
+      <img src="images/entry/img1.jpg" class="d-block w-100" alt="EntryPic2">
+    </div>
+    <div class="carousel-item" id="entry3">
+      <img src="images/entry/img3.jpg" class="d-block w-100" alt="EntryPic3">
+    </div>
+    <div class="carousel-item" id="entry4">
+      <img src="images/entry/img4.jpg" class="d-block w-100" alt="EntryPic4">
+    </div>
+    <div class="carousel-item" id="entry5">
+      <img src="images/entry/img5.jpg" class="d-block w-100" alt="EntryPic5">
+    </div>
+  </div>
+
+  <div id="entry21">
+    <div id="entry211">
+      <h1>BEAN BOUTIQUE</h1>
+      <p>“Where every cup is curated, every corner whispers calm, and every visit feels like coming home — this is coffee, elevated.”</p>
+      <p>-Bean Boutique Team</p>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+
+
+   <!-- Difference -->
+   <div style="text-align: center; font-size: 24px; margin: 30px 0;">⋯</div>
+
+
+  <!-- Offers Slide Show -->
+  <section class="py-5">
+    <div class="container" id="of">
+      <div class="text-center py-3">
+        <h2 class="section-title">Exclusive Offers</h2>
+      </div>
+
+
+      <div class="carousel-container">
+        <div id="offersCarousel" class="carousel slide" data-bs-ride="carousel">
+          
+          <!-- Indicators -->
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#offersCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#offersCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#offersCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#offersCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#offersCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+            <button type="button" data-bs-target="#offersCarousel" data-bs-slide-to="5" aria-label="Slide 6"></button>
+          </div>
+
+          <!-- Slides -->
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="images/of4/img2.png" class="d-block w-100" alt="Slide 1">
+              <div class="carousel-caption">
+                <h5>Buy the Starter kit</h5>
+                <p>The starter kit include, grinder, kettle, filter, dripper, all in one, in most effortable price.</p>
+                <a href="offers.html#a" class="btn btn-primary" id="of1">Learn More</a>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="images/of2/img3.png" class="d-block w-100" alt="Slide 2">
+              <div class="carousel-caption">
+                <h5>Buy Equipments</h5>
+                <p>Save your place in the cupping evening.</p>
+                <a href="offers.html#1" class="btn btn-warning" id="of2">Taste</a>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="images/of3/img1.png" class="d-block w-100" alt="Slide 3">
+              <div class="carousel-caption">
+                <h5>Buy a Blend.</h5>
+                <p>Buy any blend of your choice, and get very special Java Junction (Bean Boutique House Blend).</p>
+                <a href="offers.html#c" class="btn btn-success" id="of3">Get</a>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="images/of1/img4.png" class="d-block w-100" alt="Slide 4">
+              <div class="carousel-caption">
+                <h5>Buy Equipments</h5>
+                <p>Buy one equipment, Get 20% off in coffee beans.</p>
+                <a href="offers.html#d" class="btn btn-info" id="of4">Discover</a>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="images/of5/img2.png" class="d-block w-100" alt="Slide 5">
+              <div class="carousel-caption">
+                <h5>Referral Program</h5>
+                <p>Bring a friend, both get 10% off in coffee blends.</p>
+                <a href="offers.html#e" class="btn btn-danger" id="of5">Explore</a>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="images/of6/img1.png" class="d-block w-100" alt="Slide 6">
+              <div class="carousel-caption">
+                <h5>Tag</h5>
+                <p>Tag BeanBoutique Instagram handle and win many merchandises.</p>
+                <a href="offers.html#f" class="btn btn-dark" id="of6">Tag</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <button class="carousel-control-prev" type="button" data-bs-target="#offersCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#offersCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Difference -->
+  <div style="text-align: center; font-size: 24px; margin: 30px 0;">⋯</div>
+
+  <!--Featured products-->
+  <section class="py-5">
+    <div class="container" id="fpcards">
+      <h2 class="section-title">Featured Products</h2>
+
+      <!-- Desktop Carousel (shows 3 products per slide) -->
+      <div id="featuredCarouselDesktop" class="carousel slide d-none d-sm-block" data-bs-ride="carousel">
+        <div class="carousel-inner">
+
+          <!-- Slide 1 -->
+          <div class="carousel-item active">
+            <div class="row">
+
+              <!-- Product 1 -->
+              <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-img-container">
+                    <img src="images/fp/1.png" class="card-img-top" alt="Product 1">
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">Timemore Chestnut C2 Manual Grinder</h5>
+                    <p class="card-text">C2S Coffee Grinder & Fish Smart Electric Coffee Kettle & Black Mirror Duo.</p>
+                    <div class="product-price" style="font-size: larger; font-weight: bold;">$349.99</div>
+                  </div>
+                  <div class="card-footer">
+                    <a href="equipments.html#e" class="btn btn-primary w-100">Buy Now</a>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Product 2 -->
+              <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-img-container">
+                    <img src="images/fp/2.png" class="card-img-top" alt="Product 2">
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">Sumatra Mandheling</h5>
+                    <p class="card-text">Organic Dark Roast Sumatra Whole Bean Coffee - 2lb Bag.</p>
+                    <div class="product-price" style="font-size: larger; font-weight: bold;">$69.99</div>
+                  </div>
+                  <div class="card-footer">
+                    <a href="coffee.html#a" class="btn btn-primary w-100">Buy Now</a>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Product 3 -->
+              <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-img-container">
+                    <img src="images/fp/3.png" class="card-img-top" alt="Product 3">
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">Java Junction (Bean Boutique House Blend)</h5>
+                    <p class="card-text">Java Junction Blend, Medium Roast, 50% Colombian Supremo.</p>
+                    <div class="product-price" style="font-size: larger; font-weight: bold;">$99.99</div>
+                  </div>
+                  <div class="card-footer">
+                    <a href="coffee.html#b" class="btn btn-primary w-100">Buy Now</a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Product 4 -->
+              <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-img-container">
+                    <img src="images/fp/4.png" class="card-img-top" alt="Product 4">
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">Colombian Supremo</h5>
+                    <p class="card-text">Stone Street Cold Brew Coffee Duo: Breakfast Bliss and Bold Colombian Blend.</p>
+                    <div class="product-price" style="font-size: larger; font-weight: bold;">$34.99</div>
+                  </div>
+                  <div class="card-footer">
+                    <a href="coffee.html#c" class="btn btn-primary w-100">Buy Now</a>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Slide 2 -->
+          <div class="carousel-item">
+            <div class="row">
+
+              <!-- Product 5 -->
+              <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-img-container">
+                    <img src="images/fp/5.png" class="card-img-top" alt="Product 5">
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">Kenya AA</h5>
+                    <p class="card-text">Fresh Roasted Coffee, Kenya AA, Med-Dark Roast, 24 Pods for K Cup Brewers.</p>
+                    <div class="product-price" style="font-size: larger; font-weight: bold;">$14.99</div>
+                  </div>
+                  <div class="card-footer">
+                    <a href="coffee.html#d" class="btn btn-primary w-100">Buy Now</a>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Product 6 -->
+              <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-img-container">
+                    <img src="images/fp/6.png" class="card-img-top" alt="Product 6">
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">Breville Bambino Plus Espresso Machine</h5>
+                    <p class="card-text">Breville Bambino Plus Espresso Machine BES500BSS, Brushed Stainless Steel.</p>
+                    <div class="product-price" style="font-size: larger; font-weight: bold;">$334.49</div>
+                  </div>
+                  <div class="card-footer">
+                    <a href="equipments.html#f" class="btn btn-primary w-100">Buy Now</a>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Product 7 -->
+              <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-img-container">
+                    <img src="images/fp/7.png" class="card-img-top" alt="Product 7">
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">Fellow Stagg EKG Electric Gooseneck Kettle</h5>
+                    <p class="card-text">Fellow Stagg EKG Pro Electric Gooseneck Kettle - Pour-Over Coffee and Tea, Quick Heating, Precise Temperature Control, Scheduling, Built-in Brew Timer, Matte White, 0.9 Liter.</p>
+                    <div class="product-price" style="font-size: larger; font-weight: bold;">$159.99</div>
+                  </div>
+                  <div class="card-footer">
+                    <a href="equipments.html#c" class="btn btn-primary w-100">Buy Now</a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Product 8 -->
+              <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-img-container">
+                    <img src="images/fp/8.png" class="card-img-top" alt="Product 8">
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">Chemex Classic Series</h5>
+                    <p class="card-text">Chemex Pour-Over Glass Coffeemaker - Classic Series - 8-Cup - Exclusive Packaging.</p>
+                    <div class="product-price" style="font-size: larger; font-weight: bold;">$49.99</div>
+                  </div>
+                  <div class="card-footer">
+                    <a href="equipments.html#b" class="btn btn-primary w-100">Buy Now</a>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        
+        <!-- Desktop Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#featuredCarouselDesktop" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#featuredCarouselDesktop" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+
+      <!-- Mobile Carousel (shows 1 product per slide) -->
+      <div id="featuredCarouselMobile" class="carousel slide d-block d-sm-none" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          
+          <!-- Product 1 -->
+          <div class="carousel-item active">
+            <div class="card h-100 shadow-sm">
+              <div class="card-img-container">
+                <img src="images/fp/1.png" class="card-img-top" alt="Product 1">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Timemore Chestnut C2 Manual Grinder</h5>
+                <p class="card-text">C2S Coffee Grinder & Fish Smart Electric Coffee Kettle & Black Mirror Duo.</p>
+                <div class="product-price" style="font-size: larger; font-weight: bold;">$349.99</div>
+              </div>
+              <div class="card-footer">
+                <a href="equipments.html#e" class="btn btn-primary w-100">Buy Now</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Product 2 -->
+          <div class="carousel-item">
+            <div class="card h-100 shadow-sm">
+              <div class="card-img-container">
+                <img src="images/fp/2.png" class="card-img-top" alt="Product 2">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Sumatra Mandheling</h5>
+                <p class="card-text">Organic Dark Roast Sumatra Whole Bean Coffee - 2lb Bag.</p>
+                <div class="product-price" style="font-size: larger; font-weight: bold;">$69.99</div>
+              </div>
+              <div class="card-footer">
+                <a href="coffee.html#a" class="btn btn-primary w-100">Buy Now</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Product 3 -->
+          <div class="carousel-item">
+            <div class="card h-100 shadow-sm">
+              <div class="card-img-container">
+                <img src="images/fp/3.png" class="card-img-top" alt="Product 3">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Java Junction (Bean Boutique House Blend)</h5>
+                <p class="card-text">Java Junction Blend, Medium Roast, 50% Colombian Supremo.</p>
+                <div class="product-price" style="font-size: larger; font-weight: bold;">$99.99</div>
+              </div>
+              <div class="card-footer">
+                <a href="coffee.html#b" class="btn btn-primary w-100">Buy Now</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Product 4 -->
+          <div class="carousel-item">
+            <div class="card h-100 shadow-sm">
+              <div class="card-img-container">
+                <img src="images/fp/4.png" class="card-img-top" alt="Product 4">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Colombian Supremo</h5>
+                <p class="card-text">Stone Street Cold Brew Coffee Duo: Breakfast Bliss and Bold Colombian Blend</p>
+                <div class="product-price" style="font-size: larger; font-weight: bold;">$34.99</div>
+              </div>
+              <div class="card-footer">
+                <a href="coffee.html#c" class="btn btn-primary w-100">Buy Now</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Product 5 -->
+          <div class="carousel-item">
+            <div class="card h-100 shadow-sm">
+              <div class="card-img-container">
+                <img src="images/fp/5.png" class="card-img-top" alt="Product 5">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Kenya AA</h5>
+                <p class="card-text">Fresh Roasted Coffee, Kenya AA, Med-Dark Roast, 24 Pods for K Cup Brewers.</p>
+                <div class="product-price" style="font-size: larger; font-weight: bold;">$14.99</div>
+              </div>
+              <div class="card-footer">
+                <a href="coffee.html#d" class="btn btn-primary w-100">Buy Now</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Product 6 -->
+          <div class="carousel-item">
+            <div class="card h-100 shadow-sm">
+              <div class="card-img-container">
+                <img src="images/fp/6.png" class="card-img-top" alt="Product 6">
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">Breville Bambino Plus Espresso Machine</h5>
+                <p class="card-text">Breville Bambino Plus Espresso Machine BES500BSS, Brushed Stainless Steel.</p>
+                <div class="product-price" style="font-size: larger; font-weight: bold;">$334.49</div>
+              </div>
+              <div class="card-footer">
+                <a href="equipments.html#f" class="btn btn-primary w-100">Buy Now</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        
+        <!-- Mobile Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#featuredCarouselMobile" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#featuredCarouselMobile" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Difference -->
+  <div style="text-align: center; font-size: 24px; margin: 30px 0;">⋯</div>
+
+      
+  <!-- Upcoming Events -->
+  <section class="py-5">
+    <div class="container" id="uecards">
+      <h2 class="section-title">Upcoming Events</h2>
+      <div id="eventsCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+
+          <!-- Slide 1 -->
+          <div class="carousel-item active">
+            <div class="row row-cols-1 row-cols-md-2 g-3">
+
+              <!-- Event 1 -->
+              <div class="col">
+                <div class="event-card p-3">
+                  <div class="event-img-container">
+                    <img src="images/ue/3.png" class="card-img-top" alt="Product 6">
+                  </div>
+                  <h4 class="mt-3">Single Origin Showcase Night.</h4>
+                  <h5 class="mt-3">13.7.2025</h5>
+                  <p class="text-muted">Only 5 tickets left!</p>
+                  <a href="events.html#a" class="btn btn-register" id="evL1">
+                    <i class="fa fa-calendar-check-o"></i> Participate
+                  </a>
+                </div>
+              </div>
+              <!-- Event 2 -->
+              <div class="col d-none d-md-block" >
+                <div class="event-card p-3">
+                  <div class="event-img-container">
+                    <img src="images/ue/2.png" class="card-img-top" alt="Event 2">
+                  </div>
+                  <h4 class="mt-3">Brew Battle.</h4>
+                  <h5 class="mt-3">30.5.2025</h5>
+                  <p class="text-muted">Only 3 spots left!</p>
+                  <a href="events.html#b" class="btn btn-register" id="evL2">
+                    <i class="fa fa-calendar-check-o"></i> Participate
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 2 -->
+          <!-- Event 3 -->
+          <div class="carousel-item">
+            <div class="row row-cols-1 row-cols-md-2 g-3">
+              <div class="col">
+                <div class="event-card p-3">
+                  <div class="event-img-container">
+                    <img src="images/ue/1.png" class="card-img-top" alt="Event 3">
+                  </div>
+                  <h4 class="mt-3">Cupping Event.</h4>
+                  <h5 class="mt-3">22.6.2025</h5>
+                  <p class="text-muted">Save a seat!</p>
+                  <a href="events.html#c" class="btn btn-register" id="evL3">
+                    <i class="fa fa-calendar-check-o"></i> Participate
+                  </a>
+                </div>
+              </div>
+              <!-- Event 4 -->
+              <div class="col d-none d-md-block">
+                <div class="event-card p-3">
+                  <div class="event-img-container">
+                    <img src="images/ue/4.png" class="card-img-top" alt="Event 4">
+                  </div>
+                  <h4 class="mt-3">Brewing 101 (Full Course).</h4>
+                  <h5 class="mt-3">Starting very soon.</h5>
+                  <h6 class="mt-3">Saturday - Sunday</h6>
+                  <p class="text-muted">Only few spots left!</p>
+                  <a href="events.html#d" class="btn btn-register" id="evL4">
+                    <i class="fa fa-calendar-check-o"></i> Participate
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#eventsCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#eventsCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Difference -->
+  <div style="text-align: center; font-size: 24px; margin: 30px 0;">⋯</div>
+
+  <!-- Footer -->
+  <footer class="footer-section">
+    <div class="container">
+      <div class="footer-content">
+        <!-- Footer Logo & Description -->
+        <div class="footer-brand">
+          <h3 class="footer-title">Bean Boutique</h3>
+          <p class="footer-description">
+            Your premium coffee experience. Crafted with passion, brewed for perfection.
+          </p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-links">
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="coffee.html">Coffee Blends</a></li>
+            <li><a href="equipments.html">Equipment</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="footer-newsletter">
+          <h4 class="footer-heading">Stay Updated</h4>
+          <p>Subscribe for exclusive offers and brewing tips.</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Your Email" required>
+            <button type="submit" class="newsletter-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="footer-copyright">
+        <p>&copy; <span id="year"></span> Bean Boutique. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

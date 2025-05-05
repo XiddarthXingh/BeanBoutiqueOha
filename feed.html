@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <meta name="description" content="BeanBoutique - Your premium coffee shop">
+  <title>Bean Boutique - Feed</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;700&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-instagram-feed/dist/jquery.instagramFeed.min.js"></script>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="feedcss.css">
+  <script>
+    // Profile sidebar functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const profileSidebar = document.getElementById('profileSidebar');
+      const profileToggler = document.getElementById('profileToggler');
+      const closeProfileSidebar = document.getElementById('closeProfileSidebar');
+      const profileSidebarOverlay = document.getElementById('profileSidebarOverlay');
+      const searchButton = document.querySelector('.search-button');
+      const searchInput = document.querySelector('.search-input');
+
+      // Open profile sidebar
+      profileToggler.addEventListener('click', function() {
+        profileSidebar.style.width = '250px';
+        profileSidebarOverlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      });
+
+      // Close profile sidebar
+      function closeSidebar() {
+        profileSidebar.style.width = '0';
+        profileSidebarOverlay.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+
+      closeProfileSidebar.addEventListener('click', closeSidebar);
+      profileSidebarOverlay.addEventListener('click', closeSidebar);
+
+      // Search functionality
+      function performSearch() {
+        const searchTerm = searchInput.value.trim();
+        if (searchTerm) {
+          alert(`Searching for: ${searchTerm}`); 
+        }
+      }
+
+      searchButton.addEventListener('click', performSearch);
+      
+      searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          performSearch();
+        }
+      });
+
+      // Set active link based on current page
+      const currentPage = window.location.pathname.split('/').pop();
+      const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+      
+      navLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPage) {
+          link.classList.add('active');
+          link.setAttribute('aria-current', 'page');
+        }
+      });
+      
+      // Special case for home page
+      if (currentPage === '' || currentPage === 'index.html') {
+        document.getElementById('homeLink').classList.add('active');
+        document.getElementById('homeLink').setAttribute('aria-current', 'page');
+      }
+      
+      // Set current year in footer
+      document.getElementById('year').textContent = new Date().getFullYear();
+      
+      // New post button functionality
+      document.querySelector('.new-post-btn').addEventListener('click', function() {
+        document.querySelector('.new-post-textarea').focus();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      });
+      
+      // Sample post submission
+      document.querySelector('.new-post-submit-btn').addEventListener('click', function() {
+        const postText = document.querySelector('.new-post-textarea').value.trim();
+        if (postText) {
+          createPost(postText);
+          document.querySelector('.new-post-textarea').value = '';
+        }
+      });
+      
+      // Function to create a new post
+      function createPost(content, imageUrl = null) {
+        const postsContainer = document.getElementById('user-posts');
+        const postHtml = `
+          <div class="post-card">
+            <div class="post-header">
+              <img src="images/img1.png" class="post-user-img" alt="User profile">
+              <div class="post-user-info">
+                <h5>Coffee Lover</h5>
+                <small>Just now</small>
+              </div>
+            </div>
+            <div class="post-content">
+              <p class="post-text">${content}</p>
+              ${imageUrl ? `<img src="${imageUrl}" class="post-image" alt="Post image">` : ''}
+            </div>
+            <div class="post-actions">
+              <button class="post-action-btn"><i class="fa fa-heart"></i> Like</button>
+              <button class="post-action-btn"><i class="fa fa-comment"></i> Comment</button>
+              <button class="post-action-btn"><i class="fa fa-share"></i> Share</button>
+            </div>
+          </div>
+        `;
+        postsContainer.insertAdjacentHTML('afterbegin', postHtml);
+      }
+      
+      // Create some sample posts
+      createPost("Just tried the new Ethiopian Yirgacheffe at Bean Boutique - absolutely amazing floral notes with a citrusy finish! Highly recommend.");
+      createPost("My morning ritual wouldn't be complete without my French press coffee from Bean Boutique. Perfect start to the day!", "images/coffee1.jpg");
+      createPost("Does anyone have tips for getting the perfect crema on my espresso? I'm using Bean Boutique's Signature Blend (Java Junction) but still practicing my technique.");
+    });
+
+    //Instagram feed
+    $(document).ready(function(){
+      // Load Instagram feed
+      $.instagramFeed({
+        'username': 'yourcoffeeshopbestie', 
+        'container': "#instagram-feed",
+        'display_profile': false,
+        'display_biography': false,
+        'display_gallery': true,
+        'items': 9,
+        'items_per_row': 3,
+        'styling': false,
+        'margin': 0.5,
+        'callback': function(){
+          // Add hover effects after images load
+          $('.instagram-post').each(function(){
+            const likes = Math.floor(Math.random() * 500) + 50;
+            const comments = Math.floor(Math.random() * 50) + 5;
+            
+            $(this).append(`
+              <div class="post-overlay">
+                <div class="post-stats">
+                  <i class="fa fa-heart"></i> ${likes}
+                </div>
+                <div class="post-stats">
+                  <i class="fa fa-comment"></i> ${comments}
+                </div>
+              </div>
+            `);
+          });
+        }
+      });
+      
+      // Set current year
+      $('#year').text(new Date().getFullYear());
+    });
+  </script>
+</head>
+<body>
+  
+  <h1 id="javajunc">Bean Boutique</h1>
+
+  <!-- Search Bar -->
+  <div class="search-container">
+    <div class="search-bar">
+      <input type="text" class="search-input" placeholder="Search posts, people..." aria-label="Search">
+      <button type="submit" class="search-button" aria-label="Search">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <button class="profile-toggler" type="button" id="profileToggler" aria-label="Toggle profile menu" aria-haspopup="true">
+        <img src="images/img1.png" class="profile-img" alt="User profile">
+      </button>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html" id="homeLink">Home</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Products
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="productsDropdown">
+              <li><a class="dropdown-item" href="coffee.html">Coffee</a></li>
+              <li><a class="dropdown-item" href="equipments.html">Equipments</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="events.html">Events</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="offers.html">Offers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="giftcards.html">Gift Cards</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+        </ul>
+        
+        <!-- Follow Us Icon -->
+        <div class="d-flex">
+            <a href="https://instagram.com/beanboutique" class="btn btn-outline-light me-2" target="_blank">
+              <i class="fa fa-instagram"></i> Follow Us
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+  <!-- Profile Sidebar -->
+  <div class="profile-sidebar" id="profileSidebar">
+    <button class="close-btn" id="closeProfileSidebar" aria-label="Close profile menu" type="button">&times;</button>
+    <div class="profile-sidebar-content">
+      <img src="images/img1.png" class="profile-sidebar-img" alt="User profile">
+      <a href="#">My Cart</a>
+      <a href="sign.html">Sign in/Sign out</a>
+      <a href="feed.html">Feed</a>
+      <a href="location.html">Location</a>
+      <a href="contact.html">Customer Support</a>
+      <a href="#">Settings</a>
+    </div>
+  </div>
+  <div class="profile-sidebar-overlay" id="profileSidebarOverlay"></div>
+
+  <!-- Community Feed Content -->
+  <div class="feed-container">
+    <div class="feed-header">
+      <h2>Community Feed</h2>
+      <p>Share your coffee moments with the Bean Boutique community</p>
+    </div>
+    
+    <!-- New Post Card -->
+    <div class="new-post-card">
+      <textarea class="new-post-textarea" placeholder="What's brewing today?"></textarea>
+      <div class="new-post-actions">
+        <div>
+          <button class="new-post-attachment-btn" aria-label="Add photo">
+            <i class="fa fa-camera"></i>
+          </button>
+          <button class="new-post-attachment-btn" aria-label="Add location">
+            <i class="fa fa-map-marker"></i>
+          </button>
+        </div>
+        <button class="new-post-submit-btn">Post</button>
+      </div>
+    </div>
+    
+    <!-- User Posts Section -->
+    <div id="user-posts">
+    </div>
+    
+    <!-- Instagram Feed Section -->
+    <div class="feed-header mt-5">
+      <h4>---From Our Instagram---</h4>
+      <p>Follow us @beanboutique for more coffee inspiration</p>
+      <p>---o---</p>
+    </div>
+    <div id="instagram-feed"></div>
+  </div>
+  
+  <!-- Floating New Post Button -->
+  <button class="new-post-btn" aria-label="Create new post">
+    <i class="fa fa-plus"></i>
+  </button>
+
+  <!-- Footer -->
+  <footer class="footer-section">
+    <div class="container">
+      <div class="footer-content">
+        <!-- Footer Logo and Description -->
+        <div class="footer-brand">
+          <h3 class="footer-title">Bean Boutique</h3>
+          <p class="footer-description">
+            Your premium coffee experience. Crafted with passion, brewed for perfection.
+          </p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-links">
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="coffee.html">Coffee Blends</a></li>
+            <li><a href="equipments.html">Equipment</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="footer-newsletter">
+          <h4 class="footer-heading">Stay Updated</h4>
+          <p>Subscribe for exclusive offers and brewing tips.</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Your Email" required>
+            <button type="submit" class="newsletter-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="footer-copyright">
+        <p>&copy; <span id="year"></span> Bean Boutique. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <meta name="description" content="Bean Boutique - Your premium coffee shop">
+  <title>Bean Boutique - Location</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="locationcss.css">
+  <script>
+    // Profile sidebar functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const profileSidebar = document.getElementById('profileSidebar');
+      const profileToggler = document.getElementById('profileToggler');
+      const closeProfileSidebar = document.getElementById('closeProfileSidebar');
+      const profileSidebarOverlay = document.getElementById('profileSidebarOverlay');
+      const searchButton = document.querySelector('.search-button');
+      const searchInput = document.querySelector('.search-input');
+
+      // Open profile sidebar
+      profileToggler.addEventListener('click', function() {
+        profileSidebar.style.width = '250px';
+        profileSidebarOverlay.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      });
+
+      // Close profile sidebar
+      function closeSidebar() {
+        profileSidebar.style.width = '0';
+        profileSidebarOverlay.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+
+      closeProfileSidebar.addEventListener('click', closeSidebar);
+      profileSidebarOverlay.addEventListener('click', closeSidebar);
+
+      // Search functionality
+      function performSearch() {
+        const searchTerm = searchInput.value.trim();
+        if (searchTerm) {
+          alert(`Searching for: ${searchTerm}`); // Replace with actual search functionality
+          // window.location.href = `search.html?q=${encodeURIComponent(searchTerm)}`;
+        }
+      }
+
+      searchButton.addEventListener('click', performSearch);
+      
+      searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          performSearch();
+        }
+      });
+
+      // Set active link based on current page
+      const currentPage = window.location.pathname.split('/').pop();
+      const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+      
+      navLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPage) {
+          link.classList.add('active');
+          link.setAttribute('aria-current', 'page');
+        }
+      });
+      
+      // Special case for home page
+      if (currentPage === '' || currentPage === 'index.html') {
+        document.getElementById('homeLink').classList.add('active');
+        document.getElementById('homeLink').setAttribute('aria-current', 'page');
+      }
+      
+      // Set current year in footer
+      document.getElementById('year').textContent = new Date().getFullYear();
+    });
+
+
+  </script>
+</head>
+<body>
+  
+  <h1 id="javajunc">Bean Boutique</h1>
+
+  <!-- Nav Bar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <button class="profile-toggler" type="button" id="profileToggler" aria-label="Toggle profile menu" aria-haspopup="true">
+        <img src="images/img1.png" class="profile-img" alt="User profile">
+      </button>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="beanboutique.html" id="homeLink">Home</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Products
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="productsDropdown">
+              <li><a class="dropdown-item" href="coffee.html">Coffee</a></li>
+              <li><a class="dropdown-item" href="equipments.html">Equipments</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="events.html">Events</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="offers.html">Offers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="giftcards.html">Gift Cards</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+        </ul>
+        
+        <!-- Shopping Cart Icon -->
+        <div class="cart-icon">
+          <a href="cart.html" style="color: inherit;">
+            <i class="fa fa-shopping-cart"></i>
+            <span class="cart-count">0</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content - Map Section -->
+  <div class="map-container">
+    <div class="map-header">
+      <h2>Our Locations & Events</h2>
+      <p>Find your nearest Bean Boutique or discover upcoming coffee events</p>
+    </div>
+    
+    <div class="map-controls">
+      <button class="map-btn active" id="showAllBtn">All Locations</button>
+      <button class="map-btn" id="showEventsBtn">Upcoming Events</button>
+      <button class="map-btn" id="findMeBtn">Find Me</button>
+    </div>
+    
+    <div id="map"></div>
+    
+    <div class="row mt-4" id="locationCards">
+      <div class="col-md-6">
+        <div class="location-card">
+          <h3>Bean Boutique (Insein)</h3>
+          <p><i class="fa fa-map-marker"></i> 23 Mingyi St., Insein</p>
+          <p><i class="fa fa-phone"></i> +9516472819</p>
+          <p class="location-hours"><i class="fa fa-clock-o"></i> Mon-Fri: 6:30 AM - 9 PM | Sat-Sun: 7 AM - 10 PM</p>
+          <span class="event-highlight">Single Origin Showcase Night - Sat, July 13</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="location-card">
+          <h3>Bean Boutique (Mingalar Taung Nyunt)</h3>
+          <p><i class="fa fa-map-marker"></i> 31 Pyay St., Mingalar Taung Nyunt</p>
+          <p><i class="fa fa-phone"></i> +9516472818</p>
+          <p class="location-hours"><i class="fa fa-clock-o"></i> Daily: 7 AM - 8 PM</p>
+          <span class="event-highlight">Brewing 101 - Sat -Sun</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="location-card">
+          <h3>Bean Boutique (North Okkalapa)</h3>
+          <p><i class="fa fa-map-marker"></i> 51th St., North Okklapa</p>
+          <p><i class="fa fa-phone"></i> +9516472817</p>
+          <p class="location-hours"><i class="fa fa-clock-o"></i> Mon-Fri: 6 AM - 8 PM | Sat-Sun: 7 AM - 7 PM</p>
+          <span class="event-highlight">Brew Battle - Sun, May 30</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="location-card">
+          <h3>Bean Boutique (Hledan)</h3>
+          <p><i class="fa fa-map-marker"></i> Damayon St., Hledan</p>
+          <p><i class="fa fa-phone"></i> +9516472816</p>
+          <p class="location-hours"><i class="fa fa-clock-o"></i> Daily: 6:30 AM - 9 PM</p>
+          <span class="event-highlight">Cupping Event - Fri, June 22</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Sidebar -->
+  <div class="profile-sidebar" id="profileSidebar">
+    <button class="close-btn" id="closeProfileSidebar" aria-label="Close profile menu" type="button">&times;</button>
+    <div class="profile-sidebar-content">
+      <img src="images/img1.png" class="profile-sidebar-img" alt="User profile">
+      <a href="#">My Cart</a>
+      <a href="sign.html">Sign in/Sign out</a>
+      <a href="feed.html">Feed</a>
+      <a href="location.html">Location</a>
+      <a href="contact.html">Customer Support</a>
+      <a href="#">Settings</a>
+    </div>
+  </div>
+  <div class="profile-sidebar-overlay" id="profileSidebarOverlay"></div>
+
+  <!-- Difference -->
+  <div style="text-align: center; font-size: 24px; margin: 30px 0;">⋯</div>
+
+  <!-- Footer -->
+  <footer class="footer-section">
+    <div class="container">
+      <div class="footer-content">
+        <!-- Footer Logo & Description -->
+        <div class="footer-brand">
+          <h3 class="footer-title">Bean Boutique</h3>
+          <p class="footer-description">
+            Your premium coffee experience. Crafted with passion, brewed for perfection.
+          </p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-links">
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul>
+            <li><a href="beanboutique.html">Home</a></li>
+            <li><a href="coffee.html">Coffee Blends</a></li>
+            <li><a href="equipments.html">Equipment</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="about.html">About Us</a></li>
+          </ul>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="footer-newsletter">
+          <h4 class="footer-heading">Stay Updated</h4>
+          <p>Subscribe for exclusive offers and brewing tips.</p>
+          <form class="newsletter-form">
+            <input type="email" placeholder="Your Email" required>
+            <button type="submit" class="newsletter-btn">Subscribe</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="footer-copyright">
+        <p>&copy; <span id="year"></span> Bean Boutique. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Leaflet JS Map -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Map initiate
+    const map = L.map('map').setView([51.505, -0.09], 13);
+    
+    // OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+    
+    // Coffee icon
+    const coffeeIcon = L.icon({
+      iconUrl: 'https://cdn-icons-png.flaticon.com/512/924/924514.png',
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32]
+    });
+    
+    // Event icon
+    const eventIcon = L.icon({
+      iconUrl: 'https://cdn-icons-png.flaticon.com/512/924/924514.png',
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32]
+    });
+    
+    // Locations data 
+    const locations = [
+      {
+        name: "Bean Boutique (Insein)",
+        latlng: [16.8809, 96.0933],
+        address: "23 Mingyi St., Insein",
+        phone: "+9516472819",
+        hours: "Mon-Fri: 6:30 AM - 9 PM | Sat-Sun: 7 AM - 10 PM",
+        events: ["Single Origin Showcase Night - Sat, July 13"]
+      },
+      {
+        name: "Bean Boutique (Hledan)",
+        latlng: [16.858333, 96.133333],
+        address: "Damayon St., Hledan",
+        phone: "+9516472816",
+        hours: "Daily: 7 AM - 8 PM",
+        events: ["Cupping Event - Fri, June 22"]
+      },
+      {
+        name: "Bean Boutique (Mingalar Taung Nyunt)",
+        latlng: [16.7834, 96.1657],
+        address: "31 Pyay St., Mingalar Taung Nyunt",
+        phone: "+9516472818",
+        hours: "Mon-Fri: 6 AM - 8 PM | Sat-Sun: 7 AM - 7 PM",
+        events: ["Brewing 101 - Sat -Sun"]
+      },
+      {
+        name: "Bean Boutique (North Okkalapa)",
+        latlng: [16.9076, 96.1753],
+        address: "51th St., North Okklapa",
+        phone: "+9516472817",
+        hours: "Daily: 6:30 AM - 9 PM",
+        events: ["Brew Battle - Sun, May 30"]
+      }
+    ];
+    
+    // Map markers
+    const markers = [];
+    locations.forEach(location => {
+      const marker = L.marker(location.latlng, {
+        icon: location.events.length > 0 ? eventIcon : coffeeIcon
+      }).addTo(map);
+      
+      let popupContent = `<h3>${location.name}</h3>
+                         <p><i class="fa fa-map-marker"></i> ${location.address}</p>
+                         <p><i class="fa fa-phone"></i> ${location.phone}</p>
+                         <p><i class="fa fa-clock-o"></i> ${location.hours}</p>`;
+      
+      if (location.events.length > 0) {
+        popupContent += `<div class="event-highlight">${location.events[0]}</div>`;
+      }
+      
+      marker.bindPopup(popupContent);
+      markers.push(marker);
+    });
+    
+    // Fit map 
+    const group = new L.featureGroup(markers);
+    map.fitBounds(group.getBounds().pad(0.2));
+    
+    // Map control 
+    document.getElementById('showAllBtn').addEventListener('click', function() {
+      markers.forEach(marker => marker.addTo(map));
+      map.fitBounds(group.getBounds().pad(0.2));
+      document.querySelectorAll('.map-btn').forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+    });
+    
+    document.getElementById('showEventsBtn').addEventListener('click', function() {
+      const eventMarkers = markers.filter((marker, index) => locations[index].events.length > 0);
+      const eventGroup = new L.featureGroup(eventMarkers);
+      
+      markers.forEach(marker => map.removeLayer(marker));
+      eventMarkers.forEach(marker => marker.addTo(map));
+      
+      if (eventMarkers.length > 0) {
+        map.fitBounds(eventGroup.getBounds().pad(0.2));
+      } else {
+        alert('No upcoming events at our locations currently. Check back soon!');
+      }
+      
+      document.querySelectorAll('.map-btn').forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+    });
+    
+    document.getElementById('findMeBtn').addEventListener('click', function() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            const userLocation = [position.coords.latitude, position.coords.longitude];
+            const userMarker = L.marker(userLocation, {
+              icon: L.divIcon({
+                className: 'user-location-marker',
+                html: '<div style="background-color: #4b3832; width: 20px; height: 20px; border-radius: 50%; border: 3px solid #F5F0E1;"></div>',
+                iconSize: [26, 26]
+              })
+            }).addTo(map);
+            
+            userMarker.bindPopup("<b>Your Location</b>").openPopup();
+            map.setView(userLocation, 14);
+            
+            // Find nearest location
+            let nearest = null;
+            let minDistance = Infinity;
+            
+            locations.forEach(location => {
+              const distance = map.distance(userLocation, location.latlng);
+              if (distance < minDistance) {
+                minDistance = distance;
+                nearest = location;
+              }
+            });
+            
+            if (nearest) {
+              setTimeout(() => {
+                alert(`The nearest Bean Boutique is ${nearest.name}, about ${Math.round(minDistance/1000)}km away.`);
+              }, 1000);
+            }
+          },
+          error => {
+            alert("Unable to retrieve your location. Please enable location services.");
+          }
+        );
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+      
+      document.querySelectorAll('.map-btn').forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+    });
+  </script>
+</body>
+</html>
